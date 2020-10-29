@@ -8,8 +8,9 @@
 //        start location (where they board), final destination (where they get off)
 // Preconditions - Data Available
 // Postconditions - Creates a new Passenger
-Passenger::Passenger(string fullName, int age, string start, string final){
-  m_fullName=fullName;
+Passenger::Passenger(string fullName, int age, string start, string final)
+{
+  m_fullName = fullName;
   m_age = age;
   m_startLocation = start;
   m_finalDestination=final;

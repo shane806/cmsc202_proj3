@@ -3,7 +3,6 @@
 //
 
 #include <string>
-#include <fstream>
 #include <iostream>
 #include "Stop.cpp"
 #include "Route.h"
@@ -18,6 +17,8 @@ using namespace std;
    Preconditions - None
    Postconditions - Sets everything to either nullptr or 0
 */
+const int NUM_ROUTE_COLS = 2;
+
 Route::Route(){
   m_head = nullptr;
   m_tail = nullptr;
@@ -33,38 +34,46 @@ Route::Route(){
                     will be nullptr and m_totalStops will be 0
 */
 Route::~Route(){
-  Stop* curr = m_head;
-  while(m_head!=nullptr){
 
+  Stop* curr = m_head;
+  while(curr){
     m_head = m_head->GetNextStop();
+
     delete curr;
     curr = m_head;
+    m_totalStops--;
   }
+  m_head = nullptr; m_tail = nullptr; m_currentStop = nullptr;
+  cout << "total stops remaining: " << m_totalStops << endl;
 }
 
 /*
    Name: LoadRoute(string)
-   Desc - Reads the route file and calls AddStop once per line. Increments m_totalStops.
+   Desc - Reads the route file and calls AddStop once per line.
+          Increments m_totalStops.
    Preconditions - Route allocated and file available
    Postconditions - Populates route with stops. Sets m_currentStop to m_head when load completed.
 */
 void Route::LoadRoute(string routeFile) {
   ifstream routeStream (routeFile);
 
-  string line1; int i; int j;
-  while (getline(routeStream, line1)) {
-    string stopName; string stopNum;
+  string line; string stopName; int stopNum;
+  int i = 0;
 
-    for(i = 0; line1[i] != ','; i++)
-      stopName += line1[i];
+  while (getline(routeStream, line, ',')) {
+    if (i < NUM_ROUTE_COLS - 1)
+      stopName = line;
 
-    for(j = i+1; j<line1.length(); j++)
-      stopNum+=line1[j];
+    i++;
+    if (i == NUM_ROUTE_COLS - 1)
+    {
+      getline(routeStream, line);
+      stopNum = stoi(line);
 
-//    cout << "\nName: " << stopName
-//         << "\nNumber: " << stoi(stopNum);
-    AddStop(stopName, stoi(stopNum));
-    m_totalStops++;
+      AddStop(stopName, stopNum);
+
+      m_totalStops++; i = 0;
+    }
   }
   routeStream.close();
   m_currentStop = m_head;
@@ -79,12 +88,10 @@ void Route::LoadRoute(string routeFile) {
 void Route::AddStop(string stopName, int stopNum) {
   Stop* newStop = new Stop(stopName, stopNum);
 
-  newStop->SetNextStop(newStop);
-  if (m_head == nullptr)
+  if (!m_head)
     m_head = newStop;
-  else{
+  else
     m_tail->SetNextStop(newStop);
-  }
   m_tail = newStop;
 }
 /*
@@ -94,15 +101,13 @@ void Route::AddStop(string stopName, int stopNum) {
    Postconditions - Outputs data only
 */
 void Route::PrintRouteDetails(){
-  cout << "\nCurrent stop: "
+  cout << "\n  Current stop: "
        << GetCurrentStop()->GetName() << endl;
 
-  cout << "\nNext stop: "
-       << GetCurrentStop()->GetNextStop()->GetName() << endl;
-
-//  Stop* nextStop = m_currentStop->GetNextStop();
-//  cout << nextStop->GetName() << endl;
-//  cout << nextStop->GetNumber() << endl;
+  if (GetCurrentStop()->GetNextStop()){
+    cout << "\n  Next stop: "
+         << GetCurrentStop()->GetNextStop()->GetName() << endl;
+  }
 }
 
 /*
@@ -114,7 +119,6 @@ void Route::PrintRouteDetails(){
 Stop* Route::GetCurrentStop(){
   return m_currentStop;
 }
-
 /*
    Name: SetCurrentStop
    Desc - Updates m_currentStop
@@ -124,14 +128,23 @@ Stop* Route::GetCurrentStop(){
 void Route::SetCurrentStop(Stop* currStop){
   m_currentStop = currStop;
 }
-
 /*
    Name: ReverseRoute
-   Desc - At the end of a route, the route can be reversed (as in the train turns around)
+   Desc - At the end of a route, the route can
+          be reversed (as in the train turns around)
    Recommendations - Code this function last (dead last)
    Preconditions - Route has been completed
    Postconditions - Replaces old route with new reversed route.
 */
-void Route::ReverseRoute(){
+void Route::ReverseRoute() {
+  Stop* currStop = m_head, *pastStop = nullptr, *futureStop = nullptr;
 
+  while (currStop)
+  {
+    futureStop = currStop->GetNextStop();
+    currStop->SetNextStop(pastStop);
+    pastStop = currStop;
+    currStop = futureStop;
+  }
+  m_tail = m_head; m_head = pastStop; m_currentStop = m_head;
 }

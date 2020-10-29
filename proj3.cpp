@@ -18,7 +18,7 @@ int main() {
   int choice = 0;
   while (choice != 6) {
     do {
-      cout << "What would you like to do?" << endl;
+      cout << "\nWhat would you like to do?" << endl;
       cout << "1. Board Passengers" << endl;
       cout << "2. Disembark Passengers" << endl;
       cout << "3. Train Details" << endl;
@@ -31,7 +31,8 @@ int main() {
         cin.clear();
         cin.ignore(256,'\n');
       }
-    } while (choice < 1 && choice > 6) ;
+    }
+    while (choice < 1 && choice > 6);
 
     switch (choice) {
       case 1:

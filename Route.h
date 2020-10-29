@@ -71,7 +71,6 @@ public:
 */
     void SetCurrentStop(Stop*);
 
-
 /*
    Name: ReverseRoute
    Desc - At the end of a route, the route can be reversed (as in the train turns around)

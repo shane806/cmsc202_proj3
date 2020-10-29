@@ -62,7 +62,7 @@ public:
 private:
     string m_name; //Name of the stop (train station)
     int m_number; //Number of the stop
-    Stop *m_next; //Pointer to next stop
+    Stop* m_next; //Pointer to next stop
 };
 
 #endif

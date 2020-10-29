@@ -1,8 +1,8 @@
 CXX = g++
 CXXFLAGS = -Wall -g
 
-driver: Passenger.o Train.o Route.o driver.cpp
-	$(CXX) $(CXXFLAGS) Passenger.o Train.o Route.o driver.cpp -o driver
+    proj3: Passenger.o Train.o Route.o proj3.cpp
+	$(CXX) $(CXXFLAGS) Passenger.o Train.o Route.o proj3.cpp -o proj3
 
 Route.o: Route.h Route.cpp Stop.cpp
 	$(CXX) $(CXXFLAGS) -c Route.cpp
@@ -10,18 +10,18 @@ Route.o: Route.h Route.cpp Stop.cpp
 Train.o: Train.h Train.cpp Route.o Passenger.o
 	$(CXX) $(CXXFLAGS) -c Train.cpp
 
-Passenger.o: Passenger.h Passenger.cpp 
+Passenger.o: Passenger.h Passenger.cpp
 	$(CXX) $(CXXFLAGS) -c Passenger.cpp
 
 clean:
 	rm *.o*
-	rm *~ 
+	rm *~
 
 run:
-	./driver
+	./proj3
 
 val:
-	valgrind ./driver
+	valgrind -s --track-origins=yes ./proj3
 
 gdb:
-	gdb driver
+	gdb ./proj3

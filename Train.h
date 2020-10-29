@@ -8,7 +8,6 @@
 
 #ifndef TRAIN_H
 #define TRAIN_H
-
 #include "Route.h"
 #include "Passenger.h"
 #include <vector>
@@ -37,13 +36,11 @@ public:
 
   /*
    Name: Car(capacity and carNumber) - Overloaded Constructor
-
    Desc - Rail node
-
    Preconditions - Data Available
-
    Postconditions - Creates a new car with a car capacity and number
   */
+
    Car(int capacity, int carNumber) {
     m_capacity = capacity;
     m_carNumber = carNumber;
@@ -79,7 +76,7 @@ public:
   //Public Member variables
   int m_capacity; //Total capacity of the car
 
-  vector<Passenger *> m_passengers; //Vector holding passengers
+  vector< Passenger* > m_passengers; //Vector holding passengers
 
   int m_carNumber; //Number of the car (it's name)
 
